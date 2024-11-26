@@ -11,7 +11,6 @@ const val = ref(0);
 const clickButton = () => {
     refValue.address = 'Ha Noi';
     val.value = ++val.value;
-    console.log(refValue.address)
 }
 
 </script>

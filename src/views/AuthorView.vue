@@ -1,7 +1,8 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import CheckboxComponent from '@/components/CheckboxComponent.vue';
 import SearchAuthorComponent from '@/components/SearchAuthorComponent.vue';
+import axios from 'axios';
 
 const formatDate = (value) => {
     return new Date(value).toLocaleDateString('ja', {
@@ -13,35 +14,23 @@ const formatDate = (value) => {
 }
 
 const authors = ref([]);
-const user_name = ref(['']);
+const user_name = ref([''])
+
+const url = 'http://127.0.0.1:8000/api/v1/author';
 
 onMounted(() => {
-    (async () => {
-        const res = await (fetch('http://127.0.0.1:8000/api/v1/author'))
-        const data = await res.json();
-        authors.value = data.data;
-    })()
+    axios.get(url)
+        .then(res => authors.value = res.data.data)
 })
 
-const authorFilter = computed(() => {
-    return authors.value.filter(item => item.user_name.indexOf(user_name.value) !== -1)
-})
-
-// const getAuthor = async (slug) => {
-//     if (slug === '') {
-//         alert('Slug undefined');
-//         return false;
-//     }
-
-//     let url = 'http://127.0.0.1:8000/api/v1/author/' + slug;
-//     try {
-//         const res = await fetch(url).then(response => response.json())
-//         console.log(res)
-//     }
-//     catch (err) {
-//         console.log(err)
-//     }
-// }
+const authorFilter = () => {
+    if (user_name.value !== '') {
+        setTimeout(() => {
+            axios.get(url + '?query=' + user_name.value)
+                .then(res => authors.value = res.data.data)
+        }, 1000)
+    }
+};
 
 
 </script>
@@ -49,7 +38,7 @@ const authorFilter = computed(() => {
     <div class="container">
         <h1>Author</h1>
         <div class="flex justify-between">
-            <input type="text" v-model="user_name">
+            <input type="text" v-model="user_name" @keypress="authorFilter()">
             <div>
                 <RouterLink :to="{ name: 'author_create' }">Create</RouterLink>
             </div>
@@ -72,7 +61,7 @@ const authorFilter = computed(() => {
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(author, index) in authorFilter">
+                <tr v-for="(author, index) in authors">
                     <td> {{ index + 1 }}</td>
                     <td> {{ author.user_name }}</td>
                     <td> {{ author.full_name }}</td>
@@ -104,7 +93,7 @@ table {
         th {
             border-right: 1px solid red;
             border-top: 1px solid red;
-            border-left: 0;
+            border-left: 1px solid red;
             margin: 0;
         }
 
@@ -118,7 +107,7 @@ table {
             td {
                 border-right: 1px solid red;
                 border-top: 1px solid red;
-                border-left: 0;
+                border-left: 1px solid red;
                 margin: 0;
 
                 &:last-child {
