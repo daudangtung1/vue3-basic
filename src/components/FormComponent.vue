@@ -1,6 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue';
-import InputComponent from './InputComponent.vue';
+import InputComponent from './InputOldComponent.vue';
 
 const handleGetInput = (value) => {
     // console.log(value)

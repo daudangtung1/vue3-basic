@@ -1,6 +1,11 @@
 <script setup>
 import { reactive, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import InputComponent from '@/components/Elements/InputComponent.vue';
+import TextareaComponent from '@/components/Elements/TextareaComponent.vue';
+import SelectAuthorType from '@/components/SelectAuthorType.vue';
+import ButtonComponent from '@/components/Elements/ButtonComponent.vue';
+import axios from 'axios';
 
 const inputData = reactive({
     email: '',
@@ -11,79 +16,111 @@ const inputData = reactive({
     description: '',
     address: '',
     slug: '',
-    author_type_id: ''
+    author_type_id: '',
+    phone: ''
 })
+
+const handleInputData = (data) => {
+    if (data[0].model === 'user_name' && data[0].data != '') {
+        let slug = replaceToSlug(data[0].data);
+        inputData.slug = slug;
+        document.querySelector('#slug').value = inputData.slug;
+    }
+    inputData[data[0].model] = data[0].data;
+}
+
+let replaceToSlug = (slug) => {
+    let str = slug.replace(/^\s+|\s+$/g, '');
+    str = str.toLowerCase();
+    str = str.replace(/[^\w\s-]/g, '');
+    str = str.replace(/\s+/g, '-');
+    return str;
+}
+
+const handleSelectData = (data) => {
+    let model = data.model;
+    inputData[model] = data.data;
+}
 
 const submitType = ref('');
 
 const handleSubmitForm = async () => {
     const url = 'http://127.0.0.1:8000/api/v1/author/store';
-    try {
-        const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(inputData)
-        })
-        const data = await res.json();
-        console.log(data)
-    } catch (err) {
-        console.log(err)
-    }
+    await axios.post(url, inputData)
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
 }
 const router = useRoute();
 const slug = router.params.slug;
 if (!slug) {
     submitType.value = 'create';
 }
-console.log(submitType.value)
+
 </script>
 <template>
     <div class="container">
         <form>
-            <div>
-                <label for="email">Email</label><br>
-                <input id="email" type="email" v-model="inputData.email">
+            <InputComponent :label="`Email`" :id="`email`" :placeholder="`Enter email`" :type="`email`" :model="`email`"
+                v-model="inputData.email" @handle-input=handleInputData />
+
+            <InputComponent :label="`Password`" :id="`password`" :placeholder="`Enter password`" :type="`password`"
+                :model="`password`" v-model="inputData.password" @handle-input=handleInputData />
+
+            <InputComponent :label="`Username`" :id="`user_name`" :placeholder="`Enter username`" :type="`text`"
+                :model="`user_name`" v-model="inputData.user_name" @handle-input=handleInputData />
+
+            <InputComponent :label="`Slug`" :id="`slug`" :placeholder="`Enter slug`" :type="`text`" :model="`slug`"
+                v-model="inputData.slug" @handle-input=handleInputData />
+
+            <InputComponent :label="`Full name`" :id="`full_name`" :placeholder="`Enter full name`" :type="`text`"
+                :model="`full_name`" v-model="inputData.full_name" @handle-input=handleInputData />
+
+            <InputComponent :label="`Birth_day`" :id="`birth_day`" :type="`date`" :model="`birth_day`"
+                v-model="inputData.birth_day" @handle-input=handleInputData />
+
+            <InputComponent :label="`Phone number`" :id="`phone`" :type="`text`" :model="`phone`"
+                v-model="inputData.phone" @handle-input=handleInputData />
+
+            <TextareaComponent :label="`Description`" :id="`description`" :model="`description`" :rows="`2`"
+                v-model="inputData.description" @handle-input=handleInputData />
+
+            <TextareaComponent :label="`Address`" :id="`address`" :model="`address`" :rows="`2`"
+                v-model="inputData.address" @handle-input=handleInputData />
+
+            <SelectAuthorType @handle-option="handleSelectData" />
+
+            <div class="flex justify-between aligns-center">
+                <RouterLink :to="{ name: 'authors' }">Back</RouterLink>
+                <ButtonComponent :name="`Submit`" @click="handleSubmitForm" />
             </div>
-            <div>
-                <label for="password">Password</label><br>
-                <input id="password" type="password" v-model="inputData.password">
-            </div>
-            <div>
-                <label for="user_name">Username</label><br>
-                <input id="user_name" type="text" v-model="inputData.user_name">
-            </div>
-            <div>
-                <label for="full_name">Full name</label><br>
-                <input id="full_name" type="text" v-model="inputData.full_name">
-            </div>
-            <div>
-                <label for="birth_day"></label><br>
-                <input id="birth_day" type="date" v-model="inputData.birth_day">
-            </div>
-            <div>
-                <label for="description">Description</label><br>
-                <textarea id="description" v-model="inputData.description"></textarea>
-            </div>
-            <div>
-                <label for="address">Address</label><br>
-                <textarea id="address" v-model="inputData.address"></textarea>
-            </div>
-            <div>
-                <label for="slug">Slug</label><br>
-                <input type="text" id="slug" v-model="inputData.slug">
-            </div>
-            <div>
-                <label for="author_type_id">Author type</label><br>
-                <select id="author_type_id" v-model="inputData.author_type_id">
-                    <option value="1">Normal</option>
-                    <option value="2">Special</option>
-                </select>
-            </div>
-            <RouterLink :to="{ name: 'authors' }">Back</RouterLink>
-            <button type="button" @click="handleSubmitForm">Submit</button>
         </form>
     </div>
 </template>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.container {
+    padding: 50px 0;
+}
+
+form {
+    margin: 0 auto;
+}
+
+@media screen and (min-width: 320px) {
+    form {
+        padding: 0 15px;
+    }
+}
+
+@media screen and (min-width: 576px) {
+    form {
+        width: 100%;
+        padding: 0;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    form {
+        width: 50%;
+    }
+}
+</style>
