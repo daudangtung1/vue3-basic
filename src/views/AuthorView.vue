@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import CheckboxComponent from '@/components/CheckboxComponent.vue';
 import SearchAuthorComponent from '@/components/SearchAuthorComponent.vue';
 import axios from 'axios';
@@ -23,22 +23,16 @@ onMounted(() => {
         .then(res => authors.value = res.data.data)
 })
 
-const authorFilter = () => {
-    if (user_name.value !== '') {
-        setTimeout(() => {
-            axios.get(url + '?query=' + user_name.value)
-                .then(res => authors.value = res.data.data)
-        }, 1000)
-    }
-};
-
+const getAuthor = (v) => {
+    authors.value = v;
+}
 
 </script>
 <template>
     <div class="container">
         <h1>Author</h1>
-        <div class="flex justify-between">
-            <input type="text" v-model="user_name" @keypress="authorFilter()">
+        <div class="flex justify-between items-center">
+            <SearchAuthorComponent :model="user_name" @handle-search-author="getAuthor" />
             <div>
                 <RouterLink :to="{ name: 'author_create' }">Create</RouterLink>
             </div>

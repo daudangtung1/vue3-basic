@@ -1,16 +1,22 @@
 <script setup>
-import { ref } from 'vue';
+import axios from 'axios';
+import { debounce } from 'lodash';
+import InputComponent from './Elements/InputComponent.vue';
 
-
-const input = ref(['']);
-
-const handleInputSearch = (value) => {
-    console.log(value);
-}
+const emit = defineEmits(['handle-search-author']);
+const handleInputSearch = debounce(e => {
+    axios.get('http://127.0.0.1:8000/api/v1/author', {
+        params: { query: e.target.value }
+    }).then((res) => {
+        emit('handle-search-author', res.data.data)
+    }).catch((err) => {
+        console.log(err);
+    })
+}, 1500);
 </script>
 <template>
     <div>
-        <input type="text" v-model="user_name" @change="handleInputSearch()">
+        <InputComponent :type="text" @input="handleInputSearch" />
     </div>
 </template>
 <style scoped lang="scss"></style>
