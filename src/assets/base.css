@@ -98,7 +98,7 @@ ul {
   display: flex;
 }
 
-.aligns-center {
+.items-center {
   align-items: center;
 }
 
@@ -120,6 +120,18 @@ ul {
 
 .resize-none {
   resize: none;
+}
+
+.relative {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
 }
 
 /*----custom bs4----*/

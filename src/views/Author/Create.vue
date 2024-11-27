@@ -89,7 +89,7 @@ if (!slug) {
 
             <SelectAuthorType @handle-option="handleSelectData" />
 
-            <div class="flex justify-between aligns-center">
+            <div class="flex justify-between items-center">
                 <RouterLink :to="{ name: 'authors' }">Back</RouterLink>
                 <ButtonComponent :name="`Submit`" @click="handleSubmitForm" />
             </div>

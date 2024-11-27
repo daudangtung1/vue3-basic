@@ -2,11 +2,11 @@
 import LogoComponent from './LogoComponent.vue';
 </script>
 <template>
-    <header class="flex aligns-center">
+    <header class="flex items-center">
         <div class="container">
-            <nav class="flex justify-between aligns-center">
+            <nav class="flex justify-between items-center">
                 <LogoComponent></LogoComponent>
-                <ul class="flex justify-center aligns-center">
+                <ul class="flex justify-center items-center">
                     <li>
                         <RouterLink to="/" class="header-link">Home</RouterLink>
                     </li>
