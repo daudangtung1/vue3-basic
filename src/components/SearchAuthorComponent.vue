@@ -5,7 +5,8 @@ import InputComponent from './Elements/InputComponent.vue';
 
 const emit = defineEmits(['handle-search-author']);
 const handleInputSearch = debounce(e => {
-    axios.get('http://127.0.0.1:8000/api/v1/author', {
+    const url = import.meta.env.VITE_API_URL + '/author';
+    axios.get(url, {
         params: { query: e.target.value }
     }).then((res) => {
         emit('handle-search-author', res.data.data)
