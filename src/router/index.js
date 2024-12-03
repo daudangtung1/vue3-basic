@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
+      path: '/faq',
+      name: 'faq',
+      component: () => import('../views/Faq/List.vue'),
+    },
+    {
       path: '/authors',
       children: [
         {
@@ -34,6 +39,13 @@ const router = createRouter({
         }
       ]
     },
+
+    {
+      path: '/faq/create',
+      name: 'faq-create',
+      component: () => import('../views/Faq/Create.vue'),
+    },
+
   ],
 })
 

@@ -16,6 +16,9 @@ import LogoComponent from './LogoComponent.vue';
                     <li>
                         <RouterLink to="/authors" class="header-link">Author</RouterLink>
                     </li>
+                    <li>
+                        <RouterLink to="/faq" class="header-link">Faq</RouterLink>
+                    </li>
                 </ul>
             </nav>
         </div>
