@@ -50,6 +50,43 @@ const router = createRouter({
     //   ]
     // },
     {
+      path: '/authors',
+      children: [
+        {
+          path: '',
+          name: 'authors',
+          component: () => import('../views/AuthorView.vue'),
+        },
+        {
+          path: 'create',
+          name: 'author_create',
+          component: () => import('../views/Author/Create.vue')
+        },
+        {
+          path: ':slug',
+          name: 'author_detail',
+          component: () => import('../views/Author/Detail.vue')
+        }
+      ]
+    },
+
+    //Post: mock data
+    {
+      path: '/posts',
+      children: [
+        {
+          path: '',
+          name: 'post',
+          component: () => import('../views/Post/List.vue')
+        },
+        {
+          path: ':slug',
+          name: 'post_detail',
+          component: () => import('../views/Post/Detail.vue')
+        }
+      ],
+    },
+    {
       path: '/faq/create',
       name: 'faq-create',
       component: () => import('../views/Faq/Create.vue'),
