@@ -1,7 +1,20 @@
 <script>
+import axios from 'axios';
+
 export default {
   data() {
+    return {}
   },
+
+  async created() {
+    const res = await axios.get('author', {
+      headers: {
+        Authorization: 'Beaver ' + localStorage.getItem('token')
+      }
+    })
+    console.log(localStorage)
+  },
+
   methods: {
     clickH1() {
       console.log(123);
@@ -11,7 +24,7 @@ export default {
 </script>
 <template>
   <div class="about">
-    <h1 @click="clickH1">This is an about page</h1>
+    <h1 @click="clickH1"></h1>
   </div>
 </template>
 
