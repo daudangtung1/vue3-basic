@@ -29,6 +29,7 @@ const router = createRouter({
       name: 'faq',
       component: () => import('../views/Faq/List.vue'),
     },
+    //author with api --TODO: add author api later
     // {
     //   path: '/authors',
     //   children: [
@@ -49,24 +50,36 @@ const router = createRouter({
     //     }
     //   ]
     // },
+
     {
-      path: '/authors',
+      path: '/author/:slug',
       children: [
         {
           path: '',
-          name: 'authors',
-          component: () => import('../views/AuthorView.vue'),
+          name: 'author_home',
+          component: () => import('../views/Author/Home.vue')
         },
         {
-          path: 'create',
-          name: 'author_create',
-          component: () => import('../views/Author/Create.vue')
+          path: '/gallery',
+          name: 'author_gallery',
+          component: () => import('../views/Author/Gallery.vue')
         },
         {
-          path: ':slug',
-          name: 'author_detail',
-          component: () => import('../views/Author/Detail.vue')
-        }
+          path: '/favourites',
+          name: 'author_favourites',
+          component: () => import('../views/Author/Favourite.vue')
+        },
+        {
+          path: '/posts',
+          name: 'author_post',
+          component: () => import('../views/Author/Posts.vue')
+        },
+        {
+          path: 'about',
+          name: 'author_about',
+          component: () => import('../views/Author/About.vue')
+        },
+
       ]
     },
 
