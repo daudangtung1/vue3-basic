@@ -8,6 +8,7 @@ import "bootstrap"
 import store from './stores'
 import Vue3Toastify from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import './assets/main.css';
 
 const app = createApp(App)
 
